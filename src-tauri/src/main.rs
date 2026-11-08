@@ -1,7 +1,9 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+mod game_content;
+
 use std::{io::Write, sync::Mutex, time::Duration};
-use tauri::{AppHandle, Manager, State, WebviewWindow, WindowEvent};
+use tauri::{AppHandle, Manager, State, WebviewWindow, WebviewWindowBuilder, WindowEvent};
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_updater::{Update, UpdaterExt};
 
@@ -128,6 +130,9 @@ async fn export_game_save(
 }
 
 fn main() {
+    let _ = rustls::crypto::ring::default_provider().install_default();
+    let mut context = tauri::generate_context!();
+    let content = game_content::install_assets(&mut context);
     tauri::Builder::default()
         .plugin(tauri_plugin_single_instance::init(|app, _, _| {
             if let Some(window) = app.get_webview_window("main") {
@@ -138,18 +143,25 @@ fn main() {
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_dialog::init())
         .manage(Mutex::new(Updater::default()))
+        .manage(content)
         .invoke_handler(tauri::generate_handler![
             desktop_update_status,
             check_desktop_update,
             apply_prepared_update,
             cancel_update_close,
-            export_game_save
+            export_game_save,
+            game_content::game_content_status,
+            game_content::check_game_content,
+            game_content::finish_game_boot
         ])
         .setup(|app| {
+            // The asset provider selects the saved game before any window requests it.
+            WebviewWindowBuilder::from_config(app.handle(), &app.config().app.windows[0])?.build()?;
             let handle = app.handle().clone();
             tauri::async_runtime::spawn(async move {
                 tokio::time::sleep(Duration::from_secs(2)).await;
                 loop {
+                    tauri::async_runtime::spawn(game_content::check_game_content(handle.clone()));
                     check_desktop_update(handle.clone()).await;
                     tokio::time::sleep(Duration::from_secs(4 * 60 * 60)).await;
                 }
@@ -197,6 +209,6 @@ fn main() {
                 }
             });
         })
-        .run(tauri::generate_context!())
+        .run(context)
         .expect("Could not launch Little Town Chronicles");
 }

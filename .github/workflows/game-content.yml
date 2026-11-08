@@ -1,0 +1,67 @@
+name: Publish game data
+
+on:
+  push:
+    tags:
+      - 'game-v*'
+  workflow_dispatch:
+    inputs:
+      content_tag:
+        description: Existing game data tag (for example game-v34)
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-game-data
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      CONTENT_TAG: ${{ inputs.content_tag || github.ref_name }}
+    steps:
+      - name: Validate tag
+        run: |
+          [[ "$CONTENT_TAG" =~ ^game-v[1-9][0-9]*$ ]]
+      - uses: actions/checkout@v6
+        with:
+          ref: refs/tags/${{ env.CONTENT_TAG }}
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run test:game
+      - name: Sign game data
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.GAME_CONTENT_SIGNING_PRIVATE_KEY }}
+        run: node desktop/sign-game-content.cjs
+      - name: Publish signed data to the game-updates branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh auth setup-git
+          repo="https://github.com/$GITHUB_REPOSITORY.git"
+          feed="$RUNNER_TEMP/game-feed"
+          if git ls-remote --exit-code --heads "$repo" refs/heads/game-updates; then
+            git clone --single-branch --branch game-updates "$repo" "$feed"
+            node -e '
+              const fs=require("node:fs");
+              const version=p=>JSON.parse(JSON.parse(fs.readFileSync(p,"utf8")).payload).version;
+              if(version(process.argv[1]) >= version(process.argv[2])) {
+                throw new Error("Game data versions must increase");
+              }' "$feed/latest.json" dist/game-content/latest.json
+          else
+            test "$?" -eq 2
+            git init --initial-branch=game-updates "$feed"
+            git -C "$feed" remote add origin "$repo"
+          fi
+          cp dist/game-content/latest.json "$feed/latest.json"
+          git -C "$feed" add -- latest.json
+          git -C "$feed" -c user.name=github-actions -c user.email=github-actions@users.noreply.github.com commit -m "Publish $CONTENT_TAG"
+          git -C "$feed" push origin HEAD:refs/heads/game-updates

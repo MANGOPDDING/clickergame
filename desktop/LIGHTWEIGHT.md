@@ -12,9 +12,20 @@ V34のゲームをTauri 2とWindowsのWebView2で動かします。インスト�
 
 軽量版の起動時と起動中の4時間ごとに、GitHub Releasesで新版を確認します。「更新を確認」ボタンでも確認できます。署名が正しい新版を取得したら、ゲームを閉じる際にセーブを保存し、更新を適用します。次に起動したときも同じセーブを使います。
 
-## 次のリリース
+## ゲームだけ更新する（v0.36.0以降）
 
-1. `package.json` の `config.gameSource` にゲームHTMLを指定します。
+敵や装備の調整、ゲーム画面など、HTML内の変更はインストーラーのビルドなしで配布できます。
+
+1. 新しいゲームHTMLを追加し、`package.json` の `config.gameSource` をそのファイルに切り替え、`config.gameVersion` を上げます（例 34 → 35）。
+2. `npm run test:game` で確認し、変更を `main` にプッシュします。
+3. 同じ番号の `game-v35` タグをプッシュします。「Publish game data」がHTMLとJavaScriptを確認して署名し、同じリポジトリの `game-updates` ブランチに配布データを置きます。タグがある場合はこのワークフローを手動で実行することもできます。
+4. 軽量版は起動中にゲームデータを取得して、次回起動時に反映します。上部に現在のゲーム版を表示します。「更新を確認」から手動でも取得できます。
+
+取得や署名確認に失敗した場合は、手元のゲームで遊べます。取得済みの新版は起動が確認できてから保存済みの版に昇格します。署名にはアプリ本体と別の `GAME_CONTENT_SIGNING_PRIVATE_KEY` を使います。
+
+## アプリ本体を更新する
+
+1. Windowsの機能や更新の仕組みを変更します。同梱するゲームを変える場合は `package.json` のゲーム設定も更新します。
 2. `src-tauri/Cargo.toml` と `src-tauri/tauri.conf.json` の軽量版バージョンを上げます。Cargoでビルドして `src-tauri/Cargo.lock` も更新します。
 3. GitHubの `main` に変更をプッシュし、軽量版バージョンに一致するタグをプッシュします。必要なら「Build lightweight Windows release」を手動で起動して同じタグを指定できます。
 4. 下書きに軽量版インストーラー、`.sig`、`latest.json`、`latest.yml` が揃ったら公開し、GitHubの最新リリースに設定します。`latest.json` は軽量版用です。`latest.yml` は旧Electron版が更新を確認できるようにするためのファイルです。

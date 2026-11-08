@@ -8,6 +8,16 @@
     localStorage.removeItem(pendingKey);
     localStorage.setItem(key, pendingSave);
   }
+  if (window.__TAURI__?.core) {
+    const restore = sessionStorage.getItem('journeyContentSaveRestore');
+    if (restore !== null) {
+      sessionStorage.removeItem('journeyContentSaveRestore');
+      const original = JSON.parse(restore);
+      if (original === null) localStorage.removeItem(key);
+      else localStorage.setItem(key, original);
+    }
+    window.__journeySaveBeforeBoot = localStorage.getItem(key);
+  }
   const controls = document.querySelector('.top-actions');
   if (!controls) return;
 
