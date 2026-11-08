@@ -55,8 +55,7 @@ jobs:
           $out = 'dist/lightweight-release'
           # Existing Electron 0.34.0 installs still read this feed. Its equal version
           # keeps them on Electron and avoids serving a Tauri installer to that updater.
-          gh release download v0.34.0 --repo $env:GITHUB_REPOSITORY --pattern latest.yml --dir $out
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Copy-Item -LiteralPath 'desktop/electron-compat-latest.yml' -Destination "$out/latest.yml"
           $version = $env:RELEASE_TAG.Substring(1)
           $installer = "$out/LittleTownChroniclesLite-Setup-$version.exe"
           $assets = @($installer, "$installer.sig", "$out/latest.json", "$out/latest.yml")

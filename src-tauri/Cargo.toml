@@ -1,6 +1,6 @@
 [package]
 name = "little-town-chronicles"
-version = "0.35.0"
+version = "0.35.1"
 edition = "2021"
 publish = false
 
@@ -10,8 +10,10 @@ tauri-build = { version = "2", features = [] }
 [dependencies]
 serde_json = "1"
 tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
 tauri-plugin-single-instance = "2"
 tauri-plugin-updater = "2"
+tempfile = "3"
 tokio = { version = "1", features = ["time"] }
 
 [profile.release]

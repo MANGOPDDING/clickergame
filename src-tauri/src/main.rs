@@ -1,7 +1,8 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::{sync::Mutex, time::Duration};
-use tauri::{AppHandle, Manager, State, WindowEvent};
+use std::{io::Write, sync::Mutex, time::Duration};
+use tauri::{AppHandle, Manager, State, WebviewWindow, WindowEvent};
+use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_updater::{Update, UpdaterExt};
 
 type Prepared = (Update, Vec<u8>);
@@ -96,6 +97,36 @@ fn cancel_update_close(state: State<'_, Mutex<Updater>>) {
     state.status = "更新を適用できませんでした。";
 }
 
+#[tauri::command]
+async fn export_game_save(
+    app: AppHandle,
+    window: WebviewWindow,
+    contents: String,
+) -> Result<Option<String>, String> {
+    tauri::async_runtime::spawn_blocking(move || {
+        let Some(destination) = app
+            .dialog()
+            .file()
+            .set_parent(&window)
+            .set_title("セーブの書き出し")
+            .set_file_name("little-town-chronicles-save.json")
+            .add_filter("セーブファイル（JSON）", &["json"])
+            .blocking_save_file()
+        else {
+            return Ok(None);
+        };
+        let path = destination.into_path().map_err(|error| error.to_string())?;
+        let parent = path.parent().ok_or("The save path has no parent folder.")?;
+        // Replace an existing backup only after the new export has been written.
+        let mut file = tempfile::NamedTempFile::new_in(parent).map_err(|error| error.to_string())?;
+        file.write_all(contents.as_bytes()).map_err(|error| error.to_string())?;
+        file.persist(&path).map_err(|error| error.to_string())?;
+        Ok(Some(path.to_string_lossy().into_owned()))
+    })
+    .await
+    .map_err(|error| error.to_string())?
+}
+
 fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_single_instance::init(|app, _, _| {
@@ -105,12 +136,14 @@ fn main() {
             }
         }))
         .plugin(tauri_plugin_updater::Builder::new().build())
+        .plugin(tauri_plugin_dialog::init())
         .manage(Mutex::new(Updater::default()))
         .invoke_handler(tauri::generate_handler![
             desktop_update_status,
             check_desktop_update,
             apply_prepared_update,
-            cancel_update_close
+            cancel_update_close,
+            export_game_save
         ])
         .setup(|app| {
             let handle = app.handle().clone();

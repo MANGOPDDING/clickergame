@@ -4,9 +4,11 @@ V34のゲームをTauri 2とWindowsのWebView2で動かします。インスト�
 
 ## インストールとセーブ移行
 
-[GitHub Releases](https://github.com/MANGOPDDING/clickergame/releases)から `LittleTownChroniclesLite-Setup-0.35.0.exe` を取得します。
+[GitHub Releases](https://github.com/MANGOPDDING/clickergame/releases)から最新版の `LittleTownChroniclesLite-Setup-<バージョン>.exe` を取得します。
 
 すでにElectron版を使っている場合は、旧版で「セーブ書き出し」を押し、軽量版をインストールして「セーブ取り込み」から保存したJSONを選びます。軽量版で進行を確認してから旧版をアンインストールできます。以前のブラウザー版のセーブは、[HTML版からセーブを移す手順](../README.md#既存のhtml版からセーブを移す)でも移せます。
+
+軽量版 v0.35.1 以降は「セーブ書き出し」を押すと、Windowsの保存画面でフォルダーとファイル名を選べます。
 
 軽量版の起動時と起動中の4時間ごとに、GitHub Releasesで新版を確認します。「更新を確認」ボタンでも確認できます。署名が正しい新版を取得したら、ゲームを閉じる際にセーブを保存し、更新を適用します。次に起動したときも同じセーブを使います。
 

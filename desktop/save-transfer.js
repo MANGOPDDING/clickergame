@@ -26,11 +26,20 @@
     controls.append(button);
   }
 
-  addButton('セーブ書き出し', () => {
+  addButton('セーブ書き出し', async event => {
+    const button = event.currentTarget;
+    button.disabled = true;
     try {
       save();
       const saveData = JSON.parse(localStorage.getItem(key));
-      const file = new Blob([JSON.stringify({ format, save: saveData }, null, 2)], { type: 'application/json' });
+      const contents = JSON.stringify({ format, save: saveData }, null, 2);
+      const tauri = window.__TAURI__?.core;
+      if (tauri) {
+        const path = await tauri.invoke('export_game_save', { contents });
+        if (path) alert(`セーブを書き出しました。\n${path}`);
+        return;
+      }
+      const file = new Blob([contents], { type: 'application/json' });
       const url = URL.createObjectURL(file);
       const link = document.createElement('a');
       link.href = url;
@@ -39,6 +48,8 @@
       setTimeout(() => URL.revokeObjectURL(url), 1000);
     } catch {
       alert('セーブを書き出せませんでした。');
+    } finally {
+      button.disabled = false;
     }
   });
   addButton('セーブ取り込み', () => importFile.click());
