@@ -7,8 +7,8 @@
   "private": true,
   "main": "desktop/main.cjs",
   "config": {
-    "gameSource": "outputs/game-prototype-v35-modal-layout.html",
-    "gameVersion": 35
+    "gameSource": "outputs/game-prototype-v36-update-result.html",
+    "gameVersion": 36
   },
   "scripts": {
     "start": "electron .",
