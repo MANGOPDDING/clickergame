@@ -3,7 +3,7 @@ name: Build Windows release
 on:
   push:
     tags:
-      - 'v*'
+      - 'v0.34.*'
   workflow_dispatch:
     inputs:
       release_tag:
@@ -22,8 +22,8 @@ jobs:
     steps:
       - name: Validate release tag
         run: |
-          if ($env:RELEASE_TAG -notmatch '^v[0-9]+\.[0-9]+\.[0-9]+$') {
-            throw 'Use a release tag such as v0.34.0.'
+          if ($env:RELEASE_TAG -notmatch '^v0\.34\.[0-9]+$') {
+            throw 'This workflow is for legacy Electron releases (v0.34.x).'
           }
       - uses: actions/checkout@v6
         with:

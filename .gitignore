@@ -3,5 +3,9 @@
 /.electron-cache/
 /.builder-cache/
 /dist/
+/.cargo/
+/.rustup/
+/.tauri-signing/
+/src-tauri/target/
 /update-private-key*.pem
 /.env

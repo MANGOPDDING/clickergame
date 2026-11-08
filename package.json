@@ -12,12 +12,14 @@
   "scripts": {
     "start": "electron .",
     "test:game": "node -e \"process.argv[2]=require('./package.json').config.gameSource;require('./work/check-accessories.cjs')\"",
-    "build:windows": "node desktop/build.cjs"
+    "build:windows": "node desktop/build.cjs",
+    "build:lightweight": "tauri build --target x86_64-pc-windows-msvc"
   },
   "dependencies": {
     "electron-updater": "6.8.11"
   },
   "devDependencies": {
+    "@tauri-apps/cli": "2.12.4",
     "electron": "45.2.3",
     "electron-builder": "26.18.0"
   }

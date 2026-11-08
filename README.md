@@ -3,6 +3,8 @@
 
 ## 小さな町の年代記 Windows版
 
+配布用の新しいWindows版はTauri製の軽量版です。[軽量版のビルド・配布・移行手順](desktop/LIGHTWEIGHT.md)を参照してください。以下はElectron版 v0.34.0 の手順です。
+
 HTML版V34をWindowsアプリにしたものです。Windows x64向けのインストーラーを作成できます。ゲーム内容は `package.json` の `config.gameSource` で指定します。
 
 ## 手元で試す
