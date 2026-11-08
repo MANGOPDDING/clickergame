@@ -4,6 +4,12 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Existing release tag (for example v0.34.0)
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -11,9 +17,17 @@ permissions:
 jobs:
   windows:
     runs-on: windows-latest
+    env:
+      RELEASE_TAG: ${{ inputs.release_tag || github.ref_name }}
     steps:
+      - name: Validate release tag
+        run: |
+          if ($env:RELEASE_TAG -notmatch '^v[0-9]+\.[0-9]+\.[0-9]+$') {
+            throw 'Use a release tag such as v0.34.0.'
+          }
       - uses: actions/checkout@v6
         with:
+          ref: refs/tags/${{ env.RELEASE_TAG }}
           persist-credentials: false
       - uses: actions/setup-node@v6
         with:
@@ -29,16 +43,20 @@ jobs:
           JOURNEY_RELEASE_REPOSITORY: ${{ github.repository }}
           CSC_LINK: ${{ secrets.CSC_LINK }}
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
-        run: npm run build:windows
+        run: |
+          $version = node -p "require('./package.json').version"
+          if ($env:RELEASE_TAG -cne "v$version") {
+            throw "The tag must match package.json: v$version"
+          }
+          npm run build:windows
       - name: Create a draft GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          $setup = "dist/release/LittleTownChronicles-Setup-$($env:GITHUB_REF_NAME.Substring(1)).exe"
+          $setup = "dist/release/LittleTownChronicles-Setup-$($env:RELEASE_TAG.Substring(1)).exe"
           $assets = @($setup, "$setup.blockmap", 'dist/release/latest.yml')
           foreach ($asset in $assets) {
             if (-not (Test-Path -LiteralPath $asset -PathType Leaf)) {
               throw "Missing release file $asset"
             }
           }
-          gh release create $env:GITHUB_REF_NAME @assets --verify-tag --draft --generate-notes
