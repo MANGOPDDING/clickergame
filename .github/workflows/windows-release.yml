@@ -1,0 +1,44 @@
+name: Build Windows release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - name: Confirm public update feed
+        if: ${{ github.event.repository.private }}
+        run: throw 'The update feed repository must be public.'
+      - run: npm ci
+      - run: npm run test:game
+      - name: Build Windows installer and update metadata
+        env:
+          JOURNEY_RELEASE_REPOSITORY: ${{ github.repository }}
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+        run: npm run build:windows
+      - name: Create a draft GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $setup = "dist/release/LittleTownChronicles-Setup-$($env:GITHUB_REF_NAME.Substring(1)).exe"
+          $assets = @($setup, "$setup.blockmap", 'dist/release/latest.yml')
+          foreach ($asset in $assets) {
+            if (-not (Test-Path -LiteralPath $asset -PathType Leaf)) {
+              throw "Missing release file $asset"
+            }
+          }
+          gh release create $env:GITHUB_REF_NAME @assets --verify-tag --draft --generate-notes

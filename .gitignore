@@ -1,0 +1,7 @@
+/node_modules/
+/.npm-cache/
+/.electron-cache/
+/.builder-cache/
+/dist/
+/update-private-key*.pem
+/.env

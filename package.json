@@ -1,0 +1,24 @@
+{
+  "name": "little-town-chronicles",
+  "productName": "小さな町の年代記",
+  "version": "0.34.0",
+  "description": "小さな町の年代記 Windows desktop game",
+  "author": "Little Town Chronicles",
+  "private": true,
+  "main": "desktop/main.cjs",
+  "config": {
+    "gameSource": "outputs/game-prototype-v34-gold-production.html"
+  },
+  "scripts": {
+    "start": "electron .",
+    "test:game": "node -e \"process.argv[2]=require('./package.json').config.gameSource;require('./work/check-accessories.cjs')\"",
+    "build:windows": "node desktop/build.cjs"
+  },
+  "dependencies": {
+    "electron-updater": "6.8.11"
+  },
+  "devDependencies": {
+    "electron": "45.2.3",
+    "electron-builder": "26.18.0"
+  }
+}
