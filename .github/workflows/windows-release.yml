@@ -60,3 +60,7 @@ jobs:
               throw "Missing release file $asset"
             }
           }
+          gh release create $env:RELEASE_TAG @assets --repo $env:GITHUB_REPOSITORY --verify-tag --draft --generate-notes
+          if ($LASTEXITCODE -ne 0) {
+            throw "GitHub could not create the draft release."
+          }
