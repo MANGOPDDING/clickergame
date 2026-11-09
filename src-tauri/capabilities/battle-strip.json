@@ -1,0 +1,9 @@
+{
+  "identifier": "battle-strip",
+  "description": "Allow the game to toggle whether its main window stays on top.",
+  "windows": ["main"],
+  "permissions": [
+    "core:window:allow-is-always-on-top",
+    "core:window:allow-set-always-on-top"
+  ]
+}

@@ -7,8 +7,8 @@
   "private": true,
   "main": "desktop/main.cjs",
   "config": {
-    "gameSource": "outputs/game-prototype-v36-update-result.html",
-    "gameVersion": 36
+    "gameSource": "outputs/game-prototype-v38-battle-strip.html",
+    "gameVersion": 38
   },
   "scripts": {
     "start": "electron .",

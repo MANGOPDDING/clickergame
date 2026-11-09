@@ -338,13 +338,13 @@ if (html.includes('function tryUseHerb')) {
   herbs.click('auto-herb-toggle');
   assert.equal(evaluate('s.autoHerbUse'), true);
   assert.equal(evaluate('s.hpHero'), 60);
-  assert.equal(evaluate('s.herb'), 2);
+  assert.equal(evaluate('s.herb'), 0);
   assert.equal(evaluate('s.herbUsedThisRun'), true);
   evaluate('s.hpHero=20');
   assert.equal(evaluate('tryUseHerb()'), false);
   herbs.click('auto-herb-toggle');
   herbs.click('auto-herb-toggle');
-  assert.equal(evaluate('s.herb'), 2);
+  assert.equal(evaluate('s.herb'), 0);
   evaluate('save()');
   const restored = boot({townSaveV7: herbs.storage.townSaveV7});
   assert.equal(restored.run('s.autoHerbUse'), true);
@@ -352,9 +352,9 @@ if (html.includes('function tryUseHerb')) {
   assert.equal(restored.run('tryUseHerb()'), false);
   evaluate('beginFreshRun();s.hpHero=35.01');
   assert.equal(evaluate('tryUseHerb()'), false);
-  evaluate('s.hpHero=35;s.herb=.99');
+  evaluate('s.hpHero=35;s.herb=2');
   assert.equal(evaluate('tryUseHerb()'), false);
-  evaluate('s.herb=1');
+  evaluate('s.herb=3');
   assert.equal(evaluate('failIfDead()'), false);
   assert.equal(evaluate('s.hpHero'), 60);
   assert.equal(evaluate('s.herb'), 0);
