@@ -7,8 +7,8 @@
   "private": true,
   "main": "desktop/main.cjs",
   "config": {
-    "gameSource": "outputs/game-prototype-v40-window-controls.html",
-    "gameVersion": 40
+    "gameSource": "outputs/game-prototype-v43-fit-mini-window.html",
+    "gameVersion": 43
   },
   "scripts": {
     "start": "electron .",
