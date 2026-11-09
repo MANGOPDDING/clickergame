@@ -15,6 +15,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: publish-lightweight-release
+  cancel-in-progress: false
+
 jobs:
   windows:
     runs-on: windows-latest
@@ -48,7 +52,7 @@ jobs:
           npm run build:lightweight -- -- --locked
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           node desktop/lightweight-release.cjs
-      - name: Create draft release
+      - name: Publish lightweight release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -57,8 +61,13 @@ jobs:
           # keeps them on Electron and avoids serving a Tauri installer to that updater.
           Copy-Item -LiteralPath 'desktop/electron-compat-latest.yml' -Destination "$out/latest.yml"
           $version = $env:RELEASE_TAG.Substring(1)
+          $latest = gh release view --repo $env:GITHUB_REPOSITORY --json tagName --jq '.tagName'
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          if ($latest -notmatch '^v[0-9]+\.[0-9]+\.[0-9]+$' -or [version]$version -le [version]$latest.Substring(1)) {
+            throw "The release version must be newer than the current release ($latest)."
+          }
           $installer = "$out/LittleTownChroniclesLite-Setup-$version.exe"
           $assets = @($installer, "$installer.sig", "$out/latest.json", "$out/latest.yml")
           $notes = 'Windows x64軽量版です。Electron版のプレイヤーは、旧版でセーブを書き出してから軽量版に取り込んでください。'
-          gh release create $env:RELEASE_TAG @assets --repo $env:GITHUB_REPOSITORY --verify-tag --draft --title "小さな町の年代記 軽量版 $env:RELEASE_TAG" --notes $notes
+          gh release create $env:RELEASE_TAG @assets --repo $env:GITHUB_REPOSITORY --verify-tag --latest --title "小さな町の年代記 軽量版 $env:RELEASE_TAG" --notes $notes
           exit $LASTEXITCODE

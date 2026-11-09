@@ -27,8 +27,8 @@ V34のゲームをTauri 2とWindowsのWebView2で動かします。インスト�
 
 1. Windowsの機能や更新の仕組みを変更します。同梱するゲームを変える場合は `package.json` のゲーム設定も更新します。
 2. `src-tauri/Cargo.toml` と `src-tauri/tauri.conf.json` の軽量版バージョンを上げます。Cargoでビルドして `src-tauri/Cargo.lock` も更新します。
-3. GitHubの `main` に変更をプッシュし、軽量版バージョンに一致するタグをプッシュします。必要なら「Build lightweight Windows release」を手動で起動して同じタグを指定できます。
-4. 下書きに軽量版インストーラー、`.sig`、`latest.json`、`latest.yml` が揃ったら公開し、GitHubの最新リリースに設定します。`latest.json` は軽量版用です。`latest.yml` は旧Electron版が更新を確認できるようにするためのファイルです。
+3. 公開するときに、GitHubの `main` に変更をプッシュし、軽量版バージョンに一致するタグをプッシュします（例 `v0.36.1`）。GitHub Actionsの「Build lightweight Windows release」がテスト、署名付きインストーラーの作成、最新リリースへの公開を行います。タグがある場合は、このワークフローを手動で起動して公開することもできます。
+4. 公開後、軽量版は `latest.json` から更新を確認します。`latest.yml` は旧Electron版向けの確認先です。
 
 GitHub Actionsでは `TAURI_SIGNING_PRIVATE_KEY` を使います。公開鍵はアプリに組み込まれています。既存プレイヤーに更新を届けるため、同じ更新署名鍵を保管し続けます。更新署名とWindowsのコード署名は別です。Windowsのコード署名なしでビルドしたインストーラーは、実行時に警告が出ることがあります。
 
