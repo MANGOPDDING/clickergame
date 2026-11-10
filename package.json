@@ -7,8 +7,8 @@
   "private": true,
   "main": "desktop/main.cjs",
   "config": {
-    "gameSource": "outputs/game-prototype-v56-all-eras-pixel-battle.html",
-    "gameVersion": 56
+    "gameSource": "outputs/game-prototype-v57-drag-edge-and-scrollbar.html",
+    "gameVersion": 57
   },
   "scripts": {
     "start": "electron .",
