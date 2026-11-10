@@ -7,8 +7,8 @@
   "private": true,
   "main": "desktop/main.cjs",
   "config": {
-    "gameSource": "outputs/game-prototype-v45-sticky-toolbar.html",
-    "gameVersion": 45
+    "gameSource": "outputs/game-prototype-v46-inventory-scroll-lock.html",
+    "gameVersion": 46
   },
   "scripts": {
     "start": "electron .",
