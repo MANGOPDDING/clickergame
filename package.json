@@ -7,8 +7,8 @@
   "private": true,
   "main": "desktop/main.cjs",
   "config": {
-    "gameSource": "outputs/game-prototype-v57-drag-edge-and-scrollbar.html",
-    "gameVersion": 57
+    "gameSource": "outputs/game-prototype-v58.2-starter-fallback.html",
+    "gameVersion": 58
   },
   "scripts": {
     "start": "electron .",
