@@ -7,8 +7,8 @@
   "private": true,
   "main": "desktop/main.cjs",
   "config": {
-    "gameSource": "outputs/game-prototype-v46-inventory-scroll-lock.html",
-    "gameVersion": 46
+    "gameSource": "outputs/game-prototype-v56-all-eras-pixel-battle.html",
+    "gameVersion": 56
   },
   "scripts": {
     "start": "electron .",

@@ -308,7 +308,7 @@ if (html.includes('function isUiInteractionActive')) {
   const select = stable.nodes.get('stage-select');
   stable.run("document.activeElement=$('stage-select')");
   const selectWrites = select.htmlWrites;
-  stable.run('render()');
+  stable.run('s.unlocked++;render()');
   assert.equal(select.htmlWrites, selectWrites);
   stable.run('document.activeElement=document.body');
   stable.fire('focusout', {});
