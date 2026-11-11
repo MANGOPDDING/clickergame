@@ -7,8 +7,8 @@
   "private": true,
   "main": "desktop/main.cjs",
   "config": {
-    "gameSource": "outputs/game-prototype-v60.8-facility-tooltip.html",
-    "gameVersion": 62
+    "gameSource": "outputs/game-prototype-v61-pets-audio.html",
+    "gameVersion": 63
   },
   "scripts": {
     "start": "electron .",
