@@ -7,8 +7,8 @@
   "private": true,
   "main": "desktop/main.cjs",
   "config": {
-    "gameSource": "outputs/game-prototype-v58.2-starter-fallback.html",
-    "gameVersion": 58
+    "gameSource": "outputs/game-prototype-v60.3-red-construction-button.html",
+    "gameVersion": 60
   },
   "scripts": {
     "start": "electron .",
