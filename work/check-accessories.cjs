@@ -568,14 +568,17 @@ if (html.includes('function resourceProductionRate')) {
   closeTo(evaluate("resourceProductionRate('gold')"),1.89*goldMultiplier);
   assert.ok(production.nodes.get('resources').innerHTML.includes(`+${(1.89*goldMultiplier).toFixed(2)}/分`));
   evaluate('s.build.inn=2;s.build.market=3;s.skill.production=2');
-  closeTo(evaluate("resourceProductionRate('gold')"),6.279*goldMultiplier);
+  const growth = html.includes('const RESOURCE_PRODUCTION_GROWTH = 1.15') ? 1.15 : 1;
+  const wisdom = html.includes('const TOWN_WISDOM_PERCENT_PER_LEVEL = 30') ? 1.6 : 1.3;
+  const baseGoldRate = (.84 * 2 * growth + 1.05 * 3 * growth ** 2) * wisdom * goldMultiplier;
+  closeTo(evaluate("resourceProductionRate('gold')"),baseGoldRate);
   const time=Date.now();
   evaluate(`s.luck.activityUntil=${time}+120000;s.luck.commerceUntil=${time}+120000;render()`);
-  closeTo(evaluate(`resourceProductionRate('gold',${time})`),18.837*goldMultiplier);
-  closeTo(evaluate(`resourceProductionRate('ore',${time})`),.16*1.3*2);
-  assert.ok(production.nodes.get('resources').innerHTML.includes(`+${(18.837*goldMultiplier).toFixed(2)}/分`));
-  closeTo(evaluate(`buildings.filter(building=>building[3]==='gold').reduce((sum,building)=>sum+facilityProduction(building,${time},${time}+60000),0)`),18.837*goldMultiplier);
-  closeTo(evaluate(`resourceProductionRate('gold',${time}+120001)`),6.279*goldMultiplier);
+  closeTo(evaluate(`resourceProductionRate('gold',${time})`),baseGoldRate * 3);
+  closeTo(evaluate(`resourceProductionRate('ore',${time})`),.16 * wisdom * 2);
+  assert.ok(production.nodes.get('resources').innerHTML.includes('+' + evaluate("resourceProductionRate('gold').toFixed(2)") + '/分'));
+  closeTo(evaluate(`buildings.filter(building=>building[3]==='gold').reduce((sum,building)=>sum+facilityProduction(building,${time},${time}+60000),0)`),baseGoldRate * 3);
+  closeTo(evaluate(`resourceProductionRate('gold',${time}+120001)`),baseGoldRate);
   console.log('PASS: inn + market total, skills, clover multipliers, all-resource totals, display rounding, agreement with actual production');
 }
 if (html.includes('function guildMaterialRewardCount')) {
