@@ -7,8 +7,8 @@
   "private": true,
   "main": "desktop/main.cjs",
   "config": {
-    "gameSource": "outputs/game-prototype-v60.6-production-prestige.html",
-    "gameVersion": 61
+    "gameSource": "outputs/game-prototype-v60.8-facility-tooltip.html",
+    "gameVersion": 62
   },
   "scripts": {
     "start": "electron .",
