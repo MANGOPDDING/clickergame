@@ -7,8 +7,8 @@
   "private": true,
   "main": "desktop/main.cjs",
   "config": {
-    "gameSource": "outputs/game-prototype-v61.4-pet-nest-first.html",
-    "gameVersion": 65
+    "gameSource": "outputs/game-prototype-v61.5-item-actions.html",
+    "gameVersion": 66
   },
   "scripts": {
     "start": "electron .",
