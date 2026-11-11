@@ -7,8 +7,8 @@
   "private": true,
   "main": "desktop/main.cjs",
   "config": {
-    "gameSource": "outputs/game-prototype-v61-pets-audio.html",
-    "gameVersion": 63
+    "gameSource": "outputs/game-prototype-v61.3-pet-nest.html",
+    "gameVersion": 64
   },
   "scripts": {
     "start": "electron .",
