@@ -7,8 +7,8 @@
   "private": true,
   "main": "desktop/main.cjs",
   "config": {
-    "gameSource": "outputs/game-prototype-v61.9-pet-inventory.html",
-    "gameVersion": 68
+    "gameSource": "outputs/game-prototype-v61.11-accessory-fusion.html",
+    "gameVersion": 69
   },
   "scripts": {
     "start": "electron .",
