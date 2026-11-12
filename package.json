@@ -7,8 +7,8 @@
   "private": true,
   "main": "desktop/main.cjs",
   "config": {
-    "gameSource": "outputs/game-prototype-v61.8-excavation.html",
-    "gameVersion": 67
+    "gameSource": "outputs/game-prototype-v61.9-pet-inventory.html",
+    "gameVersion": 68
   },
   "scripts": {
     "start": "electron .",
