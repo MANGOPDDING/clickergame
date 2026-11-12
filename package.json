@@ -7,8 +7,8 @@
   "private": true,
   "main": "desktop/main.cjs",
   "config": {
-    "gameSource": "outputs/game-prototype-v61.5-item-actions.html",
-    "gameVersion": 66
+    "gameSource": "outputs/game-prototype-v61.8-excavation.html",
+    "gameVersion": 67
   },
   "scripts": {
     "start": "electron .",
