@@ -7,8 +7,8 @@
   "private": true,
   "main": "desktop/main.cjs",
   "config": {
-    "gameSource": "outputs/game-prototype-v61.11-accessory-fusion.html",
-    "gameVersion": 69
+    "gameSource": "outputs/game-prototype-v61.12-stage-names.html",
+    "gameVersion": 70
   },
   "scripts": {
     "start": "electron .",
