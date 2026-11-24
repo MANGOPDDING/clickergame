@@ -7,8 +7,8 @@
   "private": true,
   "main": "desktop/main.cjs",
   "config": {
-    "gameSource": "outputs/game-prototype-v61.12-stage-names.html",
-    "gameVersion": 70
+    "gameSource": "outputs/game-prototype-v68-boss-balance.html",
+    "gameVersion": 71
   },
   "scripts": {
     "start": "electron .",
