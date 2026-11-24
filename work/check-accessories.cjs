@@ -85,8 +85,16 @@ statCheck.run("s.equipment.body.sockets=Array(40).fill({type:'crit',rarityTier:2
 assert.equal(statCheck.run('stats().crit'), 100);
 run("s=fresh();s.unlocked=512;s.selected=512;const gear=makeItem(10,512);gear.sockets=Array(4).fill(null);s.inventory.push(gear);s.accessories.push({id:'test-gem',type:'speed',rarityTier:20});selectedItemId=gear.id;");
 app.click('', { socketOpen: '0', socketItem: run('gear.id') });
-assert.ok(app.nodes.get('accessory-picker-content').innerHTML.includes('10.32%'));
-app.click('', { gemInstall: 'test-gem' });
+const stagedSocketPicker = html.includes('function confirmAccessoryPicker()');
+if (stagedSocketPicker) {
+  app.click('', { socketChoice: 'test-gem' });
+  assert.ok(app.nodes.get('accessory-picker-detail').innerHTML.includes('10.32%'));
+  assert.equal(run('gear.sockets[0]'), null);
+  app.click('accessory-picker-confirm');
+} else {
+  assert.ok(app.nodes.get('accessory-picker-content').innerHTML.includes('10.32%'));
+  app.click('', { gemInstall: 'test-gem' });
+}
 assert.equal(run('s.accessories.length'), 0);
 assert.equal(run('gear.sockets[0].id'), 'test-gem');
 assert.equal(run("installAccessory(gear.id,0,'test-gem')"), false);
@@ -100,7 +108,12 @@ app.click('', { inventoryTab: 'accessories' });
 assert.equal(app.nodes.get('accessory-panel').hidden, false);
 assert.equal(app.nodes.get('inventory-content').hidden, true);
 app.click('', { gemEquip: 'test-gem' });
-app.click('', { gemDestination: run('gear.id'), socketIndex: '1', gemId: 'test-gem' });
+if (stagedSocketPicker) {
+  app.click('', { socketChoice: JSON.stringify([run('gear.id'),1]) });
+  app.click('accessory-picker-confirm');
+} else {
+  app.click('', { gemDestination: run('gear.id'), socketIndex: '1', gemId: 'test-gem' });
+}
 assert.equal(run('gear.sockets[1].id'), 'test-gem');
 run('save()');
 const reload = boot({ townSaveV7: app.storage.townSaveV7 });

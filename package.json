@@ -7,8 +7,8 @@
   "private": true,
   "main": "desktop/main.cjs",
   "config": {
-    "gameSource": "outputs/game-prototype-v68-boss-balance.html",
-    "gameVersion": 71
+    "gameSource": "outputs/game-prototype-v70-accessory-picker.html",
+    "gameVersion": 72
   },
   "scripts": {
     "start": "electron .",
