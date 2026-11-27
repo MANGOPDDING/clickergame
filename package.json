@@ -7,8 +7,8 @@
   "private": true,
   "main": "desktop/main.cjs",
   "config": {
-    "gameSource": "outputs/game-prototype-v74-all-era-bgm.html",
-    "gameVersion": 73
+    "gameSource": "outputs/game-prototype-v77-all-enemy-redesign.html",
+    "gameVersion": 74
   },
   "scripts": {
     "start": "electron .",
