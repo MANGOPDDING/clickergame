@@ -7,8 +7,8 @@
   "private": true,
   "main": "desktop/main.cjs",
   "config": {
-    "gameSource": "outputs/game-prototype-v80-town-era-requests.html",
-    "gameVersion": 76
+    "gameSource": "outputs/game-prototype-v81-town-life-visuals.html",
+    "gameVersion": 77
   },
   "scripts": {
     "start": "electron .",
