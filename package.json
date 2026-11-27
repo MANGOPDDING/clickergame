@@ -7,8 +7,8 @@
   "private": true,
   "main": "desktop/main.cjs",
   "config": {
-    "gameSource": "outputs/game-prototype-v86-battle-settings.html",
-    "gameVersion": 79
+    "gameSource": "outputs/game-prototype-v88-training-point-growth.html",
+    "gameVersion": 80
   },
   "scripts": {
     "start": "electron .",
