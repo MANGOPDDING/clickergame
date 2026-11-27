@@ -7,8 +7,8 @@
   "private": true,
   "main": "desktop/main.cjs",
   "config": {
-    "gameSource": "outputs/game-prototype-v81-town-life-visuals.html",
-    "gameVersion": 77
+    "gameSource": "outputs/game-prototype-v84-no-hatchery-helper.html",
+    "gameVersion": 78
   },
   "scripts": {
     "start": "electron .",
