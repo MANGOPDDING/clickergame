@@ -7,8 +7,8 @@
   "private": true,
   "main": "desktop/main.cjs",
   "config": {
-    "gameSource": "outputs/game-prototype-v77-all-enemy-redesign.html",
-    "gameVersion": 74
+    "gameSource": "outputs/game-prototype-v78-adventurer-redesign.html",
+    "gameVersion": 75
   },
   "scripts": {
     "start": "electron .",
