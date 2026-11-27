@@ -7,8 +7,8 @@
   "private": true,
   "main": "desktop/main.cjs",
   "config": {
-    "gameSource": "outputs/game-prototype-v78-adventurer-redesign.html",
-    "gameVersion": 75
+    "gameSource": "outputs/game-prototype-v80-town-era-requests.html",
+    "gameVersion": 76
   },
   "scripts": {
     "start": "electron .",
